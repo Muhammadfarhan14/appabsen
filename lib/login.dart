@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/screens/dosen-pembimbing/main.dart';
+import 'package:flutter_application_1/screens/mahasiswa/main.dart';
+import 'package:flutter_application_1/screens/pembimbing-lapangan/main.dart';
 import 'package:flutter_application_1/utils/constants.dart';
 import 'package:flutter_application_1/utils/log.dart';
 import 'package:flutter_application_1/utils/shared_preference_utils.dart';
@@ -48,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
     final String email = _emailController.text.trim();
     final String password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
+    if (email.isEmpty && password.isEmpty) {
       Get.snackbar(
         'Error',
         'Email dan password tidak boleh kosong',
@@ -63,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
+      Log.debug("first...");
       final response = await http.post(
         Uri.parse(apiUrl),
         headers: {
@@ -74,11 +77,22 @@ class _LoginPageState extends State<LoginPage> {
         }),
       );  
 
+      Log.debug("second...");
+
       if (response.statusCode == 200) {
         final responseData = response.body;
         Log.debug(responseData);
         SharedPreferenceUtils.setString(KEY_TOKEN, responseData);
-        Get.to(() => DashboardPage());
+        const type = TypeUser.mahasiswa;
+
+        if (type == TypeUser.dosenPembimbing) {
+          Get.off(() => MainDosenPembimbing());
+        } else if (type == TypeUser.pembimbingLapangan) {
+          Get.off(() => MainPembimbingLapangan());
+        } else {
+          Get.off(() => MainMahasiswa());
+        }
+        
       } else {
         Get.snackbar(
           'Error',
@@ -176,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                   : ElevatedButton(
                       onPressed: login,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple,
+                        backgroundColor: Colors.green,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

@@ -1,39 +1,16 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/button.dart';
-import 'package:flutter_application_1/history.dart';
-import 'package:flutter_application_1/home.dart';
-import 'package:flutter_application_1/lokasi.dart';
-// import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:flutter_application_1/screens/mahasiswa/history.dart';
+import 'package:flutter_application_1/screens/mahasiswa/home.dart';
+import 'package:flutter_application_1/screens/mahasiswa/lokasi.dart';
 
-// void main() {
-//   runApp(const MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GetMaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: 'Absensi PPL',
-//       theme: ThemeData(
-//         primarySwatch: Colors.green,
-//       ),
-//       home: const DashboardPage(),
-//     );
-//   }
-// }
-
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+class MainMahasiswa extends StatefulWidget {
+  const MainMahasiswa({Key? key}) : super(key: key);
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  State<MainMahasiswa> createState() => _MainMahasiswaState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _MainMahasiswaState extends State<MainMahasiswa> {
   int _currentIndex = 0;
 
   // Daftar halaman yang akan ditampilkan
@@ -41,10 +18,6 @@ class _DashboardPageState extends State<DashboardPage> {
     HomePage(),
     LokasiPage(),
     HistoryPage(),
-    BattunPage(),
-    // AbsensiPage(),
-    // ScanBarcode(),
-    // MapsPage()
   ];
 
   @override
@@ -56,13 +29,7 @@ class _DashboardPageState extends State<DashboardPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.account_circle),
-            onPressed: () {
-              // Aksi untuk ikon akun (misalnya navigasi ke profil pengguna)
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const HomePage()), // Ubah sesuai kebutuhan
-              // );
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -106,11 +73,8 @@ class _DashboardPageState extends State<DashboardPage> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.assignment), label: 'Lokasi'),
+          BottomNavigationBarItem(icon: Icon(Icons.camera_alt_outlined), label: 'Absen'),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Button'),
-          // BottomNavigationBarItem(icon: Icon(Icons.assignment), label: 'Absen'),
-          // BottomNavigationBarItem(icon: Icon(Icons.qr_code), label: 'Scan QR'),
         ],
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,

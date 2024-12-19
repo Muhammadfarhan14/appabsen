@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/scan_barcode.dart';
+import 'package:flutter_application_1/screens/mahasiswa/perizinan.dart';
+import 'package:flutter_application_1/screens/mahasiswa/scan_barcode.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -63,8 +64,8 @@ class _LokasiPageState extends State<LokasiPage> {
       backgroundColor: Colors.grey[100],
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Obx(() =>
-          Column(
+        child: Obx(
+          () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Informasi Jam Kerja
@@ -155,21 +156,10 @@ class _LokasiPageState extends State<LokasiPage> {
                   description:
                       "Anda berada didalam radius area kantor: $circleRadius m\nHanya dapat mengambil absen jika anda berada di kantor",
                   buttonText: "Ambil Absen",
-                  buttonColor: Colors.blue,
+                  buttonColor: Colors.green,
                   iconColor: Colors.blue,
                   textColor: Colors.black,
                   isPositionPpl: isPositionPpl.value),
-              // SizedBox(height: 16),
-              // // Absen di Luar Kantor
-              // buildAbsenCard(
-              //   title: "Absen di Luar Kantor",
-              //   description:
-              //       "Anda dapat mengambil absen di luar kantor dengan membagikan lokasi saat ini",
-              //   buttonText: "Ambil Absen",
-              //   buttonColor: Colors.red,
-              //   iconColor: Colors.red,
-              //   textColor: Colors.orange,
-              // ),
             ],
           ),
         ),
@@ -177,15 +167,14 @@ class _LokasiPageState extends State<LokasiPage> {
     );
   }
 
-  Widget buildAbsenCard({
-    required String title,
-    required String description,
-    required String buttonText,
-    required Color buttonColor,
-    required Color iconColor,
-    required Color textColor,
-    required bool isPositionPpl
-  }) {
+  Widget buildAbsenCard(
+      {required String title,
+      required String description,
+      required String buttonText,
+      required Color buttonColor,
+      required Color iconColor,
+      required Color textColor,
+      required bool isPositionPpl}) {
     return Card(
       elevation: 2,
       child: Padding(
@@ -206,26 +195,49 @@ class _LokasiPageState extends State<LokasiPage> {
               style: TextStyle(color: textColor, fontSize: 14),
             ),
             SizedBox(height: 16),
-            ElevatedButton.icon(
-              
-              onPressed: () {
-                if (isPositionPpl) {
-                  Get.to(const ScanBarcode());
-                } else {
-                  Get.snackbar("Peringatan", "tidak berada di lokasi");
-                }
-                
-              },
-              icon: const Icon(Icons.check_circle_outline),
-              label: Text(buttonText),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: buttonColor,
-                // onPrimary: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 130,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      if (isPositionPpl) {
+                        Get.to(const ScanBarcode());
+                      } else {
+                        Get.snackbar("Peringatan", "tidak berada di lokasi");
+                      }
+                    },
+                    icon: const Icon(Icons.check_circle_outline, color: Colors.white,),
+                    label: Text(buttonText, style: TextStyle(fontSize: 10, color: Colors.white),),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: buttonColor,
+                      // onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
+                Container(
+                  width: 130,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Get.to(PerizinanPage());
+                    },
+                    icon: const Icon(Icons.check_circle_outline, color: Colors.white,),
+                    label: Text("Izin / Sakit", style: TextStyle(fontSize: 10, color: Colors.white),),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      // onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),

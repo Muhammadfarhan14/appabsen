@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/lokasi.dart';
-import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/screens/mahasiswa/main.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -51,7 +50,7 @@ class _ScanBarcodeState extends State<ScanBarcode> {
         actions: [
           TextButton(
             onPressed: () {
-              Get.to(const DashboardPage());
+              Get.to(const MainMahasiswa());
               },
             child: const Text('OK'),
           ),

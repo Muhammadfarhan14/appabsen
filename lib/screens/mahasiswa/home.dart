@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/components/text/text_component.dart';
 import 'package:flutter_application_1/controller/time_controller.dart';
 import 'package:get/get.dart';
 
@@ -17,17 +18,17 @@ class HomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hi, Rian Reski Ananda",
+                "Hi, Ferry Irwandi",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 8),
               Text(
-                timeController.formattedDate.value,
+                timeController.formattedTime.value,
                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 4),
               Text(
-                timeController.formattedTime.value,
+                timeController.formattedDate.value,
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
               SizedBox(height: 16),
@@ -51,11 +52,11 @@ class HomePage extends StatelessWidget {
                             ElevatedButton(
                               onPressed: () {},
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
+                                backgroundColor: Colors.green,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8)),
                               ),
-                              child: Text("08:37:26"),
+                              child: TextComponent("08:37:26", color: Colors.white, size: 14,),
                             ),
                           ],
                         ),
@@ -84,7 +85,7 @@ class HomePage extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8)),
                               ),
-                              child: Text("08:37:26"),
+                              child: TextComponent("08:37:26", size: 12, color: Colors.white,),
                             ),
                           ],
                         ),
