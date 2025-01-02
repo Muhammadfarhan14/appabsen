@@ -68,37 +68,6 @@ class _LokasiPageState extends State<LokasiPage> {
           () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Informasi Jam Kerja
-              Card(
-                elevation: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          "Rabu, 16 Desember 2020",
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                          overflow: TextOverflow
-                              .ellipsis, // Tambahkan agar teks dipotong jika terlalu panjang
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.circle, color: Colors.blue, size: 16),
-                          const SizedBox(width: 8),
-                          const Text("07:30"),
-                          const SizedBox(width: 16),
-                          // Icon(Icons.circle, color: Colors.orange, size: 16),
-                          // const SizedBox(width: 8),
-                          // const Text("16:00"),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               SizedBox(height: 16),
               // Peta Lokasi
               Card(
@@ -106,56 +75,47 @@ class _LokasiPageState extends State<LokasiPage> {
                 child: Column(
                   children: [
                     Container(
-                        height: 200,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image:
-                                AssetImage('assets/google_map_placeholder.png'),
-                            fit: BoxFit.cover,
+                      height: MediaQuery.of(context).size.height *
+                          0.5, // Peta lebih panjang
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image:
+                              AssetImage('assets/google_map_placeholder.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: OSMFlutter(
+                        onMapIsReady: (isReady) {
+                          print("Map is ready");
+                          drawMaps();
+                          // Periksa saat peta siap
+                          checkUserInCircle();
+                        },
+                        controller: controller,
+                        osmOption: OSMOption(
+                          userTrackingOption: UserTrackingOption(
+                            enableTracking: true,
+                            unFollowUser: false,
+                          ),
+                          zoomOption: ZoomOption(
+                            minZoomLevel: 15,
+                            maxZoomLevel: 19,
+                            stepZoom: 1.0,
                           ),
                         ),
-                        child: OSMFlutter(
-                          onMapIsReady: (isReady) {
-                            print("Map is ready");
-                            drawMaps();
-                            // Periksa saat peta siap
-                            checkUserInCircle();
-                          },
-                          controller: controller,
-                          osmOption: OSMOption(
-                            userTrackingOption: UserTrackingOption(
-                              enableTracking: true,
-                              unFollowUser: false,
-                            ),
-                            zoomOption: ZoomOption(
-                              minZoomLevel: 15,
-                              maxZoomLevel: 19,
-                              stepZoom: 1.0,
-                            ),
-                          ),
-                        )
-                        // Center(
-                        //   child: ElevatedButton.icon(
-                        //     onPressed: () {},
-                        //     icon: Icon(Icons.gps_fixed),
-                        //     label: Text("Cek Ulang GPS"),
-                        //     style: ElevatedButton.styleFrom(
-                        //       backgroundColor: Colors.blue,
-                        //       // onPrimary: Colors.white,
-                        //     ),
-                        //   ),
-                        // ),
-                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
+
               SizedBox(height: 16),
               // Absen di Kantor
               buildAbsenCard(
-                  title: "Absen di Kantor",
+                  title: "Presensi di Kantor",
                   description:
                       "Anda berada didalam radius area kantor: $circleRadius m\nHanya dapat mengambil absen jika anda berada di kantor",
-                  buttonText: "Ambil Absen",
+                  buttonText: "Presensi",
                   buttonColor: Colors.green,
                   iconColor: Colors.blue,
                   textColor: Colors.black,
@@ -208,8 +168,14 @@ class _LokasiPageState extends State<LokasiPage> {
                         Get.snackbar("Peringatan", "tidak berada di lokasi");
                       }
                     },
-                    icon: const Icon(Icons.check_circle_outline, color: Colors.white,),
-                    label: Text(buttonText, style: TextStyle(fontSize: 10, color: Colors.white),),
+                    icon: const Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      buttonText,
+                      style: TextStyle(fontSize: 10, color: Colors.white),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: buttonColor,
                       // onPrimary: Colors.white,
@@ -225,8 +191,14 @@ class _LokasiPageState extends State<LokasiPage> {
                     onPressed: () {
                       Get.to(PerizinanPage());
                     },
-                    icon: const Icon(Icons.check_circle_outline, color: Colors.white,),
-                    label: Text("Izin / Sakit", style: TextStyle(fontSize: 10, color: Colors.white),),
+                    icon: const Icon(
+                      Icons.event_busy,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      "Izin / Sakit",
+                      style: TextStyle(fontSize: 10, color: Colors.white),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
                       // onPrimary: Colors.white,

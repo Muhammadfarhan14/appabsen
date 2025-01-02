@@ -126,27 +126,22 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset(
+              'assets/logo.png',
+            ),
               const Text(
-                'PRESENSI',
+                'PRESENSI PRAKTEK PENGALAMAN LAPANGAN',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'PRAKTEK PENGALAMAN LAPANGAN',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
                 ),
               ),
               const SizedBox(height: 24),
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  labelText: 'E-mail Anda',
+                  labelText: 'NIM/Username anda',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -201,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: const [
                           Icon(Icons.login, color: Colors.white),
                           SizedBox(width: 8),
-                          Text(
+                          Text( 
                             'Masuk',
                             style: TextStyle(
                               fontSize: 16,

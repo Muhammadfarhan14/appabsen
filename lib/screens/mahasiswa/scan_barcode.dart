@@ -45,7 +45,8 @@ class _ScanBarcodeState extends State<ScanBarcode> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Hasil Pemindaian'),
+        icon: const Icon(Icons.check_circle_outline_outlined),
+        title: const Text('Berhasil'),
         content: Text(result),
         actions: [
           TextButton(

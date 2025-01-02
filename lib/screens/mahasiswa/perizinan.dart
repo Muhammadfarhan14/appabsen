@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/text/text_component.dart';
+import 'package:flutter_application_1/login.dart';
+import 'package:get/get.dart';
 
 class PerizinanPage extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -24,13 +26,15 @@ class _PengajuanPerizinanPageState extends State<PengajuanPerizinanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
         backgroundColor: Colors.green,
         title: const Text('Absensi PPL'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.account_circle),
-            onPressed: () {},
+             onPressed: () {
+              Get.off(LoginPage());
+            },
+            icon: const Icon(Icons.logout),
           ),
         ],
       ),

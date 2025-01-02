@@ -4,12 +4,27 @@ import 'package:flutter_application_1/controller/time_controller.dart';
 import 'package:get/get.dart';
 
 // import 'package:intl/intl.dart';
-class HomePage extends StatelessWidget {
+class ChecklistItem {
+  final String title;
+  final bool isCompleted;
 
-  final TimeController timeController = Get.put(TimeController()); // Injeksi controller
+  ChecklistItem(this.title, this.isCompleted);
+}
+
+class HomePage extends StatelessWidget {
+  final TimeController timeController =
+      Get.put(TimeController()); // Injeksi controller
 
   @override
   Widget build(BuildContext context) {
+    final List<ChecklistItem> checklist = [
+      ChecklistItem("Presensi Datang", true),
+      ChecklistItem("Presensi 2", false),
+      ChecklistItem("Presensi 3", true),
+      ChecklistItem("Presensi 4", true),
+      ChecklistItem("Presensi Pulang", true),
+    ];
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,73 +44,11 @@ class HomePage extends StatelessWidget {
               SizedBox(height: 4),
               Text(
                 timeController.formattedDate.value,
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                style: TextStyle(fontSize: 14, color: Colors.black),
               ),
               SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: Card(
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              "Absen Masuk",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                            ),
-                            SizedBox(height: 8),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8)),
-                              ),
-                              child: TextComponent("08:37:26", color: Colors.white, size: 14,),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Card(
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Text("Absen Pulang",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black)),
-                            // Icon(Icons.remove, color: Colors.orange),
-                            SizedBox(height: 8),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orange,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8)),
-                              ),
-                              child: TextComponent("08:37:26", size: 12, color: Colors.white,),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               const Text(
-                'Absensi Bulan November 2045',
+                'Presensi Bulan November 2045',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 10),
@@ -105,11 +58,50 @@ class HomePage extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 childAspectRatio: 2,
                 children: [
-                  _buildAbsenceDetailCard('Hadir', '1 Hari', Colors.green),
-                  _buildAbsenceDetailCard('Izin', '0 Hari', Colors.orange),
-                  _buildAbsenceDetailCard('Sakit', '0 Hari', Colors.grey),
-                  _buildAbsenceDetailCard('Terlambat', '1 Hari', Colors.red),
+                  _buildAbsenceDetailCard(
+                      'Hadir', '1 Hari', Colors.green, Icons.done),
+                  _buildAbsenceDetailCard(
+                      'Izin', '0 Hari', Colors.orange, Icons.alarm),
+                  _buildAbsenceDetailCard(
+                      'Sakit', '0 Hari', Colors.grey, Icons.medical_services),
+                  _buildAbsenceDetailCard(
+                      'Terlambat', '1 Hari', Colors.red, Icons.timer_off),
                 ],
+              ),
+              SizedBox(height: 16),
+              const Text(
+                'Presensi Hari Ini',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+              Container(
+                width: double.infinity, // Set full width
+                child: ListView.builder(
+                  shrinkWrap:
+                      true, // Allows the ListView to take only as much height as needed
+                  physics:
+                      NeverScrollableScrollPhysics(), // Disable scrolling to prevent conflicts
+                  itemCount: checklist.length,
+                  itemBuilder: (context, index) {
+                    final item = checklist[index];
+                    return ListTile(
+                      leading: Checkbox(
+                        value: item.isCompleted,
+                        onChanged: null, // Disable interaction
+                        checkColor: Colors.green,
+                        activeColor: Colors.white,
+                      ),
+                      title: Text(
+                        item.title,
+                        style: TextStyle(
+                          color: item.isCompleted ? Colors.black: Colors.black,
+                          decoration: item.isCompleted
+                              ? TextDecoration.none
+                              : TextDecoration.none,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -154,7 +146,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildAbsenceDetailCard(String title, String days, Color color) {
+  Widget _buildAbsenceDetailCard(
+      String title, String days, Color color, IconData icon) {
     return Container(
       margin: const EdgeInsets.all(4),
       padding: const EdgeInsets.all(12),
@@ -166,7 +159,7 @@ class HomePage extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: color.withOpacity(0.2),
-            child: Icon(Icons.check, color: color),
+            child: Icon(icon, color: color),
           ),
           const SizedBox(width: 10),
           Column(

@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/login.dart';
 import 'package:flutter_application_1/screens/pembimbing-lapangan/home.dart';
+import 'package:get/get.dart';
 
 
 class MainPembimbingLapangan extends StatefulWidget {
@@ -20,14 +22,10 @@ class _MainPembimbingLapanganState extends State<MainPembimbingLapangan> {
         title: const Text('Absensi PPL'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.account_circle),
             onPressed: () {
-              // Aksi untuk ikon akun (misalnya navigasi ke profil pengguna)
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const HomePage()), // Ubah sesuai kebutuhan
-              // );
+              Get.off(LoginPage());
             },
+             icon: const Icon(Icons.logout),
           ),
         ],
       ),
