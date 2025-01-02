@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferenceUtils.initialize(); // Penting!
@@ -46,7 +45,8 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
 
   Future<void> login() async {
-    const String apiUrl = '$BASE_URL/login';
+    const String loginUrl = '$BASE_URL/login';
+    const String meUrl = '$BASE_URL/me';
     final String email = _emailController.text.trim();
     final String password = _passwordController.text;
 
@@ -65,9 +65,8 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      Log.debug("first...");
       final response = await http.post(
-        Uri.parse(apiUrl),
+        Uri.parse(loginUrl),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -75,24 +74,35 @@ class _LoginPageState extends State<LoginPage> {
           'username': email,
           'password': password,
         }),
-      );  
-
-      Log.debug("second...");
+      );
 
       if (response.statusCode == 200) {
-        final responseData = response.body;
-        Log.debug(responseData);
-        SharedPreferenceUtils.setString(KEY_TOKEN, responseData);
-        const type = TypeUser.mahasiswa;
+        final token = response.body;
 
-        if (type == TypeUser.dosenPembimbing) {
+        final resMe = await http.get(
+          Uri.parse(meUrl),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token', // Tambahkan Bearer Token di sini
+          },
+        );
+
+        final resDecodeMe = jsonDecode(resMe.body);
+
+        final typeAkun = resDecodeMe["data"]["roles"];
+
+        Log.debug("resDecodeMe : $resDecodeMe");
+        Log.debug("typeAkun : $typeAkun");
+
+        SharedPreferenceUtils.setString(KEY_TOKEN, token);
+
+        if (typeAkun == TypeUser.dosenPembimbing) {
           Get.off(() => MainDosenPembimbing());
-        } else if (type == TypeUser.pembimbingLapangan) {
+        } else if (typeAkun == TypeUser.pembimbingLapangan) {
           Get.off(() => MainPembimbingLapangan());
         } else {
           Get.off(() => MainMahasiswa());
         }
-        
       } else {
         Get.snackbar(
           'Error',

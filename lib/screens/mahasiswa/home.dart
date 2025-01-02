@@ -5,8 +5,7 @@ import 'package:get/get.dart';
 
 // import 'package:intl/intl.dart';
 class HomePage extends StatelessWidget {
-
-  final TimeController timeController = Get.put(TimeController()); // Injeksi controller
+  final TimeController timeController = Get.put(TimeController());
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +55,11 @@ class HomePage extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8)),
                               ),
-                              child: TextComponent("08:37:26", color: Colors.white, size: 14,),
+                              child: TextComponent(
+                                "08:37:26",
+                                color: Colors.white,
+                                size: 14,
+                              ),
                             ),
                           ],
                         ),
@@ -85,7 +88,11 @@ class HomePage extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8)),
                               ),
-                              child: TextComponent("08:37:26", size: 12, color: Colors.white,),
+                              child: TextComponent(
+                                "08:37:26",
+                                size: 12,
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controller/absen_controller.dart';
 import 'package:flutter_application_1/screens/mahasiswa/perizinan.dart';
-import 'package:flutter_application_1/screens/mahasiswa/scan_barcode.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -17,6 +17,8 @@ class _LokasiPageState extends State<LokasiPage> {
       GeoPoint(latitude: -5.2115756, longitude: 119.5058004);
   final double circleRadius = 100.0; // dalam meter
   var isPositionPpl = false.obs;
+
+  final AbsenController absenController = Get.put(AbsenController());
 
   @override
   void initState() {
@@ -201,15 +203,22 @@ class _LokasiPageState extends State<LokasiPage> {
                 Container(
                   width: 130,
                   child: ElevatedButton.icon(
-                    onPressed: () {
-                      if (isPositionPpl) {
-                        Get.to(const ScanBarcode());
-                      } else {
-                        Get.snackbar("Peringatan", "tidak berada di lokasi");
-                      }
+                    onPressed: () async {
+                      absenController.checkAbsenDatang();
+                      // if (isPositionPpl) {
+                      //   absenController.checkAbsenDatang();
+                      // } else {
+                      //   Get.snackbar("Peringatan", "tidak berada di lokasi");
+                      // }
                     },
-                    icon: const Icon(Icons.check_circle_outline, color: Colors.white,),
-                    label: Text(buttonText, style: TextStyle(fontSize: 10, color: Colors.white),),
+                    icon: const Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      buttonText,
+                      style: TextStyle(fontSize: 10, color: Colors.white),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: buttonColor,
                       // onPrimary: Colors.white,
@@ -225,8 +234,14 @@ class _LokasiPageState extends State<LokasiPage> {
                     onPressed: () {
                       Get.to(PerizinanPage());
                     },
-                    icon: const Icon(Icons.check_circle_outline, color: Colors.white,),
-                    label: Text("Izin / Sakit", style: TextStyle(fontSize: 10, color: Colors.white),),
+                    icon: const Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      "Izin / Sakit",
+                      style: TextStyle(fontSize: 10, color: Colors.white),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
                       // onPrimary: Colors.white,

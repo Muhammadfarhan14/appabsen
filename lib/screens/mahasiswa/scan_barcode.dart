@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/mahasiswa/main.dart';
+import 'package:flutter_application_1/controller/absen_controller.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -12,6 +12,8 @@ class ScanBarcode extends StatefulWidget {
 
 class _ScanBarcodeState extends State<ScanBarcode> {
   String? scannedBarcode;
+
+  final AbsenController absenController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class _ScanBarcodeState extends State<ScanBarcode> {
           if (scannedBarcode != barcode.rawValue) {
             setState(() {
               scannedBarcode = barcode.rawValue ?? 'Unknown QR Code';
-            }); 
+            });
             _showResultDialog(context, scannedBarcode!);
           }
         },
@@ -49,9 +51,7 @@ class _ScanBarcodeState extends State<ScanBarcode> {
         content: Text(result),
         actions: [
           TextButton(
-            onPressed: () {
-              Get.to(const MainMahasiswa());
-              },
+            onPressed: absenController.absenDatang,
             child: const Text('OK'),
           ),
         ],
