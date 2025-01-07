@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/login.dart';
 import 'package:flutter_application_1/screens/mahasiswa/history.dart';
 import 'package:flutter_application_1/screens/mahasiswa/home.dart';
 import 'package:flutter_application_1/screens/mahasiswa/lokasi.dart';
+import 'package:get/get.dart';
 
 class MainMahasiswa extends StatefulWidget {
   const MainMahasiswa({Key? key}) : super(key: key);
@@ -25,44 +27,17 @@ class _MainMahasiswaState extends State<MainMahasiswa> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text('Absensi PPL'),
+        title: const Text('Presensi PPL'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.account_circle),
-            onPressed: () {},
+             onPressed: () {
+              Get.to(LoginPage());
+            },
+            icon: const Icon(Icons.logout),
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.green),
-              child: Text(
-                'Menu',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: const Text('Home'),
-              onTap: () {
-                Navigator.pop(context); // Tutup drawer
-                setState(() {
-                  _currentIndex = 0; // Tampilkan halaman Home
-                });
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings),
-              title: const Text('Settings'),
-              onTap: () {
-                // Tambahkan navigasi ke halaman Settings jika diperlukan
-              },
-            ),
-          ],
-        ),
-      ),
+     
       body: _pages[_currentIndex], // Tampilkan halaman sesuai indeks aktif
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex, // Menentukan halaman aktif
