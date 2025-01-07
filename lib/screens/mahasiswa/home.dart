@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hi, Ferry Irwandi",
+                "Hi, Muhammad Farhan",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 8),
@@ -66,8 +66,8 @@ class HomePage extends StatelessWidget {
                       'Izin', '0 Hari', Colors.orange, Icons.alarm),
                   _buildAbsenceDetailCard(
                       'Sakit', '0 Hari', Colors.grey, Icons.medical_services),
-                  _buildAbsenceDetailCard(
-                      'Terlambat', '1 Hari', Colors.red, Icons.timer_off),
+                  // _buildAbsenceDetailCard(
+                  //     'Terlambat', '1 Hari', Colors.red, Icons.timer_off),
                 ],
               ),
               SizedBox(height: 16),

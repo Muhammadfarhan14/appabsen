@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/widgets/date_picker.dart';
 
+void main() {
+  runApp(DosenPage());
+}
+
 class DosenPage extends StatelessWidget {
   const DosenPage({Key? key}) : super(key: key);
   Widget build(BuildContext context) {
