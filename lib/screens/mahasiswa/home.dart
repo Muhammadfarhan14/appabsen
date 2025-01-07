@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/components/text/text_component.dart';
+import 'package:flutter_application_1/controller/absen_controller.dart';
 import 'package:flutter_application_1/controller/time_controller.dart';
+import 'package:flutter_application_1/utils/constants.dart';
+import 'package:flutter_application_1/utils/log.dart';
 import 'package:get/get.dart';
 
 // import 'package:intl/intl.dart';
@@ -13,11 +15,12 @@ class ChecklistItem {
 
 class HomePage extends StatelessWidget {
   final TimeController timeController = Get.put(TimeController());
+  final AbsenController absenController = Get.put(AbsenController());
 
   @override
   Widget build(BuildContext context) {
     final List<ChecklistItem> checklist = [
-      ChecklistItem("Presensi Datang", true),
+      ChecklistItem("Presensi Datang", false),
       ChecklistItem("Presensi 2", false),
       ChecklistItem("Presensi 3", true),
       ChecklistItem("Presensi 4", true),
@@ -46,76 +49,6 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 14, color: Colors.black),
               ),
               SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: Card(
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              "Absen Masuk",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                            ),
-                            SizedBox(height: 8),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8)),
-                              ),
-                              child: TextComponent(
-                                "08:37:26",
-                                color: Colors.white,
-                                size: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Card(
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Text("Absen Pulang",
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black)),
-                            // Icon(Icons.remove, color: Colors.orange),
-                            SizedBox(height: 8),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orange,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8)),
-                              ),
-                              child: TextComponent(
-                                "08:37:26",
-                                size: 12,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               const Text(
                 'Presensi Bulan November 2045',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
@@ -143,35 +76,77 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
               Container(
-                width: double.infinity, // Set full width
-                child: ListView.builder(
-                  shrinkWrap:
-                      true, // Allows the ListView to take only as much height as needed
-                  physics:
-                      NeverScrollableScrollPhysics(), // Disable scrolling to prevent conflicts
-                  itemCount: checklist.length,
-                  itemBuilder: (context, index) {
-                    final item = checklist[index];
-                    return ListTile(
-                      leading: Checkbox(
-                        value: item.isCompleted,
-                        onChanged: null, // Disable interaction
-                        checkColor: Colors.green,
-                        activeColor: Colors.white,
-                      ),
-                      title: Text(
-                        item.title,
-                        style: TextStyle(
-                          color: item.isCompleted ? Colors.black : Colors.black,
-                          decoration: item.isCompleted
-                              ? TextDecoration.none
-                              : TextDecoration.none,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+                  width: double.infinity, // Set full width
+                  child: Obx(
+                    () => ListView.builder(
+                      shrinkWrap:
+                          true, // Allows the ListView to take only as much height as needed
+                      physics:
+                          NeverScrollableScrollPhysics(), // Disable scrolling to prevent conflicts
+                      itemCount: absenController.dataAbsen.length,
+                      itemBuilder: (context, index) {
+                        final item = checklist[index];
+                        final absen = absenController.dataAbsen[index];
+                        final status = absen["status"];
+                        Log.debug(status);
+
+                        // Tentukan warna latar belakang dan ikon berdasarkan status
+                        Color backgroundColor;
+                        Color iconColor;
+                        IconData? iconData;
+
+                        if (status == StatusAbsen.absen.description) {
+                          backgroundColor = Colors.green.withOpacity(0.1);
+                          iconColor = Colors.green;
+                          iconData = Icons.check;
+                        } else if (status ==
+                            StatusAbsen.belumAbsen.description) {
+                          backgroundColor =
+                              Colors.grey; // Tidak ubah warna latar belakang
+                          iconColor = Colors.grey; // Tidak ada ikon
+                          iconData = null; // Tidak ada ikon
+                        } else {
+                          backgroundColor = Colors.red.withOpacity(0.1);
+                          iconColor = Colors.red;
+                          iconData = Icons.close;
+                        }
+
+                        return ListTile(
+                          leading: Container(
+                            width: 24, // Ukuran kotak
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color:
+                                  backgroundColor, // Latar belakang yang sudah ditentukan
+                              border: Border.all(
+                                color:
+                                    iconColor, // Warna border yang sudah ditentukan
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                  4), // Kotak dengan sudut melengkung sedikit
+                            ),
+                            child: iconData != null
+                                ? Icon(
+                                    iconData,
+                                    color: iconColor, // Warna ikon
+                                    size: 18, // Ukuran ikon
+                                  )
+                                : null, // Tidak ada ikon jika belum absen
+                          ),
+                          title: Text(
+                            status,
+                            style: TextStyle(
+                              color: Colors.black,
+                              decoration: item.isCompleted
+                                  ? TextDecoration.none
+                                  : TextDecoration.none,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )),
             ],
           ),
         ),

@@ -21,6 +21,22 @@ class AbsenController extends GetxController {
   var tanggal = Rxn<DateTime>();
   var file = Rxn<File>(); // Rxn untuk nullable
   final keteranganController = TextEditingController();
+  var dataAbsen = [].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _waitForTokenAndGetAbsen();
+  }
+
+  Future<void> _waitForTokenAndGetAbsen() async {
+    while (token == null) {
+      // Tunggu hingga token tidak null
+      await Future.delayed(Duration(milliseconds: 500));
+    }
+    // Setelah token tersedia, panggil getAbsen
+    await getAbsen();
+  }
 
   Future<void> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -28,6 +44,19 @@ class AbsenController extends GetxController {
     if (result != null && result.files.single.path != null) {
       file.value =
           File(result.files.single.path!); // Menyimpan file yang dipilih
+    }
+  }
+
+  Future<void> getAbsen() async {
+    try {
+      Log.debug("getAbsen");
+      Log.debug("token $token");
+      final response = await apiService.getRequest(URL_GET_ABSEN, token);
+      Log.debug(response);
+      dataAbsen.value = response['data'];
+    } catch (e) {
+      Log.debug(e.toString());
+      Get.snackbar("Error", e.toString());
     }
   }
 

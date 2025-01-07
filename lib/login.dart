@@ -5,6 +5,7 @@ import 'package:flutter_application_1/screens/pembimbing-lapangan/main.dart';
 import 'package:flutter_application_1/utils/constants.dart';
 import 'package:flutter_application_1/utils/log.dart';
 import 'package:flutter_application_1/utils/shared_preference_utils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -20,13 +21,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Halaman Login',
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
+    return ScreenUtilInit(
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      builder: (context, child) => GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Halaman Login',
+        theme: ThemeData(
+          primarySwatch: Colors.purple,
+        ),
+        home: const LoginPage(),
       ),
-      home: const LoginPage(),
     );
   }
 }
@@ -43,6 +48,27 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus(); // Tambahkan pengecekan saat inisialisasi
+  }
+
+  Future<void> _checkLoginStatus() async {
+    // final token = await SharedPreferenceUtils.getString(KEY_TOKEN);
+    final typeAkun = await SharedPreferenceUtils.getString(KEY_TYPE_AKUN);
+
+    if (typeAkun == TypeUser.dosenPembimbing.description) {
+      Get.off(() => MainDosenPembimbing());
+    }
+    // else if (typeAkun == TypeUser.pembimbingLapangan.description) {
+    //   Get.off(() => MainPembimbingLapangan());
+    // }
+    else if (typeAkun == TypeUser.mahasiswa.description) {
+      Get.off(() => MainMahasiswa());
+    }
+  }
 
   Future<void> login() async {
     const String loginUrl = '$BASE_URL/login';
@@ -95,12 +121,15 @@ class _LoginPageState extends State<LoginPage> {
         Log.debug("typeAkun : $typeAkun");
 
         SharedPreferenceUtils.setString(KEY_TOKEN, token);
+        SharedPreferenceUtils.setString(KEY_TYPE_AKUN, typeAkun);
 
-        if (typeAkun == TypeUser.dosenPembimbing) {
+        if (typeAkun == TypeUser.dosenPembimbing.description) {
           Get.off(() => MainDosenPembimbing());
-        } else if (typeAkun == TypeUser.pembimbingLapangan) {
-          Get.off(() => MainPembimbingLapangan());
-        } else {
+        }
+        // else if (typeAkun == TypeUser.pembimbingLapangan) {
+        //   Get.off(() => MainPembimbingLapangan());
+        // }
+        else if (typeAkun == TypeUser.mahasiswa.description) {
           Get.off(() => MainMahasiswa());
         }
       } else {
@@ -137,8 +166,8 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-              'assets/logo.png',
-            ),
+                'assets/logo.png',
+              ),
               const Text(
                 'PRESENSI PRAKTEK PENGALAMAN LAPANGAN',
                 textAlign: TextAlign.center,
@@ -206,7 +235,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: const [
                           Icon(Icons.login, color: Colors.white),
                           SizedBox(width: 8),
-                          Text( 
+                          Text(
                             'Masuk',
                             style: TextStyle(
                               fontSize: 16,

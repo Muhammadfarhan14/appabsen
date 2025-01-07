@@ -3,6 +3,8 @@ import 'package:flutter_application_1/login.dart';
 import 'package:flutter_application_1/screens/mahasiswa/history.dart';
 import 'package:flutter_application_1/screens/mahasiswa/home.dart';
 import 'package:flutter_application_1/screens/mahasiswa/lokasi.dart';
+import 'package:flutter_application_1/utils/constants.dart';
+import 'package:flutter_application_1/utils/shared_preference_utils.dart';
 import 'package:get/get.dart';
 
 class MainMahasiswa extends StatefulWidget {
@@ -30,14 +32,16 @@ class _MainMahasiswaState extends State<MainMahasiswa> {
         title: const Text('Presensi PPL'),
         actions: [
           IconButton(
-             onPressed: () {
-              Get.to(LoginPage());
+            onPressed: () {
+              SharedPreferenceUtils.setString(KEY_TOKEN, "");
+              SharedPreferenceUtils.setString(KEY_TYPE_AKUN, "");
+              Get.off(LoginPage());
             },
             icon: const Icon(Icons.logout),
           ),
         ],
       ),
-     
+
       body: _pages[_currentIndex], // Tampilkan halaman sesuai indeks aktif
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex, // Menentukan halaman aktif
@@ -48,7 +52,8 @@ class _MainMahasiswaState extends State<MainMahasiswa> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.camera_alt_outlined), label: 'Absen'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt_outlined), label: 'Absen'),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
         ],
         selectedItemColor: Colors.green,

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/widgets/date_picker.dart';
 
 class DosenPage extends StatelessWidget {
   const DosenPage({Key? key}) : super(key: key);
   Widget build(BuildContext context) {
+    final ScrollController scrollController = ScrollController();
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
+      appBar: null,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -15,7 +19,9 @@ class DosenPage extends StatelessWidget {
             SizedBox(height: 12),
 
             // Calendar Section
-            _CalendarSection(),
+            // _CalendarSection(),
+
+            DatePicker(scrollController: scrollController, id: "0"),
 
             SizedBox(height: 12),
 
