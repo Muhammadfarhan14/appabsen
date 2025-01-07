@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(DosenPage());
+}
+
 class DosenPage extends StatelessWidget {
   const DosenPage({Key? key}) : super(key: key);
   Widget build(BuildContext context) {

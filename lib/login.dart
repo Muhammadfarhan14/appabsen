@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
         final responseData = response.body;
         Log.debug(responseData);
         SharedPreferenceUtils.setString(KEY_TOKEN, responseData);
-        const type = TypeUser.mahasiswa;
+        const type = TypeUser.dosenPembimbing;
 
         if (type == TypeUser.dosenPembimbing) {
           Get.off(() => MainDosenPembimbing());
@@ -129,6 +129,7 @@ class _LoginPageState extends State<LoginPage> {
               Image.asset(
               'assets/logo.png',
             ),
+             SizedBox(height: 10),
               const Text(
                 'PRESENSI PRAKTEK PENGALAMAN LAPANGAN',
                 textAlign: TextAlign.center,
