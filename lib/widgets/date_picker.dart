@@ -168,7 +168,7 @@ class _DatePickerState extends State<DatePicker> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SvgPicture.asset(
-                  'assets/icons/next_date.svg',
+                  'assets/next_date.svg',
                   width: 40.r,
                   height: 20.r,
                 ),

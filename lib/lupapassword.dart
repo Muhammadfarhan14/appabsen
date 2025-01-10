@@ -7,7 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 //   runApp(MyApp());
 // }
 
-class MyApp extends StatelessWidget {
+class ForgotPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextField(
                 obscureText: !_isPasswordVisible,
                 decoration: InputDecoration(
-                  labelText: 'Kata sandi Anda',
+                  labelText: 'Password Anda',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextField(
                 obscureText: !_isPasswordVisible,
                 decoration: InputDecoration(
-                  labelText: 'Kata sandi Anda',
+                  labelText: 'Konfirmasi Password Anda',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -145,3 +145,5 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
