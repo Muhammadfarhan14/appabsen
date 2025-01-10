@@ -57,17 +57,17 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _checkLoginStatus() async {
     // final token = await SharedPreferenceUtils.getString(KEY_TOKEN);
-    final typeAkun = await SharedPreferenceUtils.getString(KEY_TYPE_AKUN);
+    // final typeAkun = await SharedPreferenceUtils.getString(KEY_TYPE_AKUN);
 
-    if (typeAkun == TypeUser.dosenPembimbing.description) {
-      Get.off(() => MainDosenPembimbing());
-    }
+    // if (typeAkun == TypeUser.dosenPembimbing.description) {
+    //   Get.off(() => MainDosenPembimbing());
+    // }
     // else if (typeAkun == TypeUser.pembimbingLapangan.description) {
     //   Get.off(() => MainPembimbingLapangan());
     // }
-    else if (typeAkun == TypeUser.mahasiswa.description) {
-      Get.off(() => MainMahasiswa());
-    }
+    // else if (typeAkun == TypeUser.mahasiswa.description) {
+    //   Get.off(() => MainMahasiswa());
+    // }
   }
 
   Future<void> login() async {
