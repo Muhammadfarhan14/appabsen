@@ -12,12 +12,12 @@ class PerizinanPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.green,
           title: const Text('Absensi PPL'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.account_circle),
-              onPressed: () {},
-            ),
-          ],
+          // actions: [
+          //   IconButton(
+          //     icon: const Icon(Icons.account_circle),
+          //     onPressed: () {},
+          //   ),
+          // ],
         ),
         body: Obx(
           () => Padding(

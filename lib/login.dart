@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/lupapassword.dart';
 import 'package:flutter_application_1/screens/dosen-pembimbing/main.dart';
 import 'package:flutter_application_1/screens/mahasiswa/main.dart';
-import 'package:flutter_application_1/screens/pembimbing-lapangan/main.dart';
 import 'package:flutter_application_1/utils/constants.dart';
 import 'package:flutter_application_1/utils/log.dart';
 import 'package:flutter_application_1/utils/shared_preference_utils.dart';
@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _checkLoginStatus(); // Tambahkan pengecekan saat inisialisasi
+    // _checkLoginStatus(); // Tambahkan pengecekan saat inisialisasi
   }
 
   Future<void> _checkLoginStatus() async {
@@ -115,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
 
         final resDecodeMe = jsonDecode(resMe.body);
 
-        final typeAkun = resDecodeMe["data"]["roles"];
+        final typeAkun = resDecodeMe["data"]["roles"] as String;
 
         Log.debug("resDecodeMe : $resDecodeMe");
         Log.debug("typeAkun : $typeAkun");
@@ -124,6 +124,7 @@ class _LoginPageState extends State<LoginPage> {
         SharedPreferenceUtils.setString(KEY_TYPE_AKUN, typeAkun);
 
         if (typeAkun == TypeUser.dosenPembimbing.description) {
+          Log.debug("test");
           Get.off(() => MainDosenPembimbing());
         }
         // else if (typeAkun == TypeUser.pembimbingLapangan) {
@@ -131,6 +132,8 @@ class _LoginPageState extends State<LoginPage> {
         // }
         else if (typeAkun == TypeUser.mahasiswa.description) {
           Get.off(() => MainMahasiswa());
+        } else {
+          Log.debug("error");
         }
       } else {
         Get.snackbar(
@@ -195,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                 controller: _passwordController,
                 obscureText: !_isPasswordVisible,
                 decoration: InputDecoration(
-                  labelText: 'Kata sandi Anda',
+                  labelText: 'Password Anda',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -215,6 +218,26 @@ class _LoginPageState extends State<LoginPage> {
                         _isPasswordVisible = !_isPasswordVisible;
                       });
                     },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Align(
+                alignment:
+                    Alignment.centerRight, // Menempatkan teks di sebelah kanan
+                child: GestureDetector(
+                  onTap: () {
+                    // Logika navigasi ke halaman ganti password
+                    Get.to(() => ForgotPasswordPage());
+                  },
+                  child: Text(
+                    'Lupa Password?',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ),
