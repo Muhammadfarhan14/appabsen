@@ -1,53 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controller/pembimbing_controller.dart';
 import 'package:flutter_application_1/screens/dosen-pembimbing/data.dart';
+import 'package:flutter_application_1/utils/constants.dart';
+import 'package:flutter_application_1/utils/log.dart';
 import 'package:get/get.dart';
 
 class DosenPage extends StatelessWidget {
-  const DosenPage({Key? key}) : super(key: key);
+  final PembimbingController pembimbingController =
+      Get.put(PembimbingController());
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: null,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header Section
-            _HeaderSection(),
+      body: Obx(
+        () => SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header Section
+              _HeaderSection(),
 
-            SizedBox(height: 10),
+              SizedBox(height: 10),
 
-            // Lokasi PPL
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                "Lokasi PPL",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87),
-              ),
-            ),
-
-            SizedBox(height: 12),
-
-            // List of Locations
-            Expanded(
-              child: ListView.builder(
+              // Lokasi PPL
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: 3, // Pastikan jumlah ini sesuai dengan data Anda
-                itemBuilder: (context, index) {
-                  return _LokasiPPLCard(
-                    lokasi: "Lokasi PPL ${index + 1}", // Contoh data dinamis
-                    alamat: "Alamat Lokasi PPL ${index + 1}",
-                    Kehadiran: "Presentasi Kehadiran",
-                    logoPath:
-                        "assets/logo_placeholder.png", // Pastikan file ini ada
-                  );
-                },
+                child: Text(
+                  "Lokasi PPL",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87),
+                ),
               ),
-            ),
-          ],
+
+              SizedBox(height: 12),
+
+              // List of Locations
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: pembimbingController.dataLokasiPpl
+                      .length, // Pastikan jumlah ini sesuai dengan data Anda
+                  itemBuilder: (context, index) {
+                    final dataPpl = pembimbingController.dataLokasiPpl[index];
+                    Log.debug(dataPpl);
+                    return _LokasiPPLCard(
+                      lokasi:
+                          "Lokasi PPL ${dataPpl["nama"]}", // Contoh data dinamis
+                      alamat: "Alamat Lokasi PPL ${dataPpl["alamat"]}",
+                      Kehadiran: "Presentasi Kehadiran",
+                      logoPath:
+                          "$BASE_IMAGE/${dataPpl["gambar"]}", // Pastikan file ini ada
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -155,76 +166,111 @@ class _LokasiPPLCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Log.debug("images => $logoPath");
     return Card(
       margin: EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: EdgeInsets.all(12),
-        child: Column(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Title (Lokasi)
-            Text(
-              lokasi,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            SizedBox(height: 8),
+            // Gambar di sebelah kiri
+            // ClipRRect(
+            //   borderRadius: BorderRadius.circular(8),
+            //   child: Image.network(
+            //     logoPath, // Gambar dari URL
+            //     height: 80, // Tinggi gambar
+            //     width: 80, // Lebar gambar
+            //     fit: BoxFit.cover,
+            //     errorBuilder: (context, error, stackTrace) {
+            //       return Container(
+            //         height: 80,
+            //         width: 80,
+            //         color: Colors.grey.shade300,
+            //         child: Icon(
+            //           Icons.broken_image,
+            //           size: 40,
+            //           color: Colors.grey.shade700,
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
+            // SizedBox(width: 12), // Spasi antara gambar dan teks
 
-            // Subtitle (Alamat)
-            Text(
-              alamat,
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
-            ),
-            SizedBox(height: 12),
+            // Kolom teks
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title (Lokasi)
+                  Text(
+                    lokasi,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 8),
 
-            Text(
-              Kehadiran,
-              style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
-            ),
-            
+                  // Subtitle (Alamat)
+                  Text(
+                    alamat,
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                  ),
+                  SizedBox(height: 8),
 
-            // Trailing (Persentase Kehadiran dan Tombol Aksi)
-            Row(
-              children: [
-                // Persentase Kehadiran
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.orange.shade100,
-                    borderRadius: BorderRadius.circular(8),
+                  // Kehadiran
+                  Text(
+                    Kehadiran,
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: Text(
-                    "80%",
-                    style: TextStyle(
-                      color: Colors.orange,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Spacer(),
 
-                // Tombol Lihat
-                ElevatedButton(
-                  onPressed: () {
-                    Get.to(HadirPage());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                  // Persentase Kehadiran dan Tombol Aksi
+                  Row(
+                    children: [
+                      // Persentase Kehadiran
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.orange.shade100,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: Text(
+                          "80%",
+                          style: TextStyle(
+                            color: Colors.orange,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+
+                      // Tombol Lihat
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.to(HadirPage());
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          "Lihat",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    "Lihat",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
