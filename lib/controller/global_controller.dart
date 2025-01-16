@@ -4,6 +4,7 @@ import 'package:flutter_application_1/utils/constants.dart';
 
 class GlobalController extends GetxController {
   Rx<String?> token = Rx<String?>(null);
+  Rx<int?> id = Rx<int?>(null);
 
   @override
   Future<void> onInit() async {
@@ -14,6 +15,8 @@ class GlobalController extends GetxController {
   // Metode untuk memuat token
   Future<void> _loadToken() async {
     String? storedToken = await SharedPreferenceUtils.getString(KEY_TOKEN);
+    int? storedId = await SharedPreferenceUtils.getInt(KEY_ID);
     token.value = storedToken;
+    id.value = storedId;
   }
 }

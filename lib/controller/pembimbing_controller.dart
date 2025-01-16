@@ -9,9 +9,11 @@ import 'package:get/get.dart';
 
 class PembimbingController extends GetxController {
   final GlobalController globalController = Get.put(GlobalController());
+
   final ApiService apiService = ApiService(); // Inisialisasi ApiService
 
   String? get token => globalController.token.value;
+  int? get iduser => globalController.id.value;
 
   var status = ''.obs; // Reactive variable
   // var tanggalController = TextEditingController(); // Rxn untuk nullable
@@ -19,6 +21,7 @@ class PembimbingController extends GetxController {
   var file = Rxn<File>(); // Rxn untuk nullable
   final keteranganController = TextEditingController();
   var dataLokasiPpl = [].obs;
+  var detailLokasiPpl = [].obs;
 
   @override
   void onInit() {
@@ -43,6 +46,23 @@ class PembimbingController extends GetxController {
     } catch (e) {
       Log.debug(e.toString());
       Get.snackbar("Error", e.toString());
+    }
+  }
+
+  Future<void> getDetailLokasiPpl(id, String date) async {
+    try {
+      Log.debug("dosen_pembimbing_id => $iduser");
+      Log.debug("date => $date");
+      final response = await apiService.postRequest(
+          URL_GET_DETAIL_LOKASI_PPL,
+          token,
+          {"tanggal": date, "lokasi_id": id, "dosen_pembimbing_id": iduser});
+      Log.debug(response);
+
+      detailLokasiPpl.value = response['data'];
+    } catch (e) {
+      Log.debug(e.toString());
+      // Get.snackbar("Error", e.toString());
     }
   }
 }

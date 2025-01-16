@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controller/pembimbing_controller.dart';
+import 'package:flutter_application_1/utils/log.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -6,17 +8,32 @@ import 'package:get/get.dart';
 import '../../shared/themes.dart';
 
 class DatePickerController extends GetxController {
+  final PembimbingController pembimbingController =
+      Get.put(PembimbingController());
+
   var selectedDateIndex = 0.obs;
   var dates = List<String>.generate(31, (index) => 'Hari ${index + 1}').obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _setTodayAsDefault();
+  }
+
+  void _setTodayAsDefault() {
+    final today = DateTime.now();
+    selectedDateIndex.value = today.day; // Set index berdasarkan hari ini
+  }
 
   void setDate(int index) {
     print('Date selected: $index'); // Debugging log
     selectedDateIndex.value = index;
   }
 
-  Future<void> getMahasiswaByLokasi(String date, String id) async {
-    print('Fetching data for date: $date and id: $id'); // Debugging log
+  Future<void> getMahasiswaByLokasi(String date, int id) async {
+    Log.debug('Fetching data for date: $date and id: $id'); // Debugging log
     // Logika untuk mengambil data berdasarkan lokasi dan tanggal.
+    pembimbingController.getDetailLokasiPpl(id, date);
   }
 }
 
@@ -25,7 +42,7 @@ class DatePicker extends StatefulWidget {
       : super(key: key);
 
   final ScrollController scrollController;
-  final String id;
+  final int id;
 
   @override
   State<DatePicker> createState() => _DatePickerState();
@@ -37,11 +54,13 @@ class _DatePickerState extends State<DatePicker> {
   @override
   void initState() {
     super.initState();
+    // Menunggu frame pertama untuk memanggil scroll otomatis setelah inisialisasi
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToIndex(dateController.selectedDateIndex.value);
     });
   }
 
+  // Fungsi untuk scroll ke indeks tertentu
   void _scrollTo(double offset) {
     if (offset <= widget.scrollController.position.maxScrollExtent &&
         offset >= widget.scrollController.position.minScrollExtent) {
@@ -53,6 +72,7 @@ class _DatePickerState extends State<DatePicker> {
     }
   }
 
+  // Fungsi untuk scroll berdasarkan index
   void _scrollToIndex(int index) {
     if (widget.scrollController.hasClients) {
       final itemWidth = 51.r;
@@ -78,8 +98,6 @@ class _DatePickerState extends State<DatePicker> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Obx(() {
-          print(
-              'Rebuilding with selected date: ${dateController.selectedDateIndex.value}'); // Debugging log
           return Container(
             height: 45.h,
             width: 270.w,
@@ -101,7 +119,7 @@ class _DatePickerState extends State<DatePicker> {
                       await Future.delayed(
                           const Duration(milliseconds: 200)); // Optional delay
                       await dateController.getMahasiswaByLokasi(
-                        '2023-01-${index + 1}',
+                        '2025-01-${index + 1}',
                         widget.id,
                       );
                     },

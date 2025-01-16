@@ -47,6 +47,7 @@ class DosenPage extends StatelessWidget {
                     final dataPpl = pembimbingController.dataLokasiPpl[index];
                     Log.debug(dataPpl);
                     return _LokasiPPLCard(
+                      id: dataPpl["id"],
                       lokasi:
                           "Lokasi PPL ${dataPpl["nama"]}", // Contoh data dinamis
                       alamat: "Alamat Lokasi PPL ${dataPpl["alamat"]}",
@@ -151,6 +152,7 @@ class _CalendarSection extends StatelessWidget {
 
 // Lokasi PPL Card Widget
 class _LokasiPPLCard extends StatelessWidget {
+  final int id;
   final String lokasi;
   final String alamat;
   final String Kehadiran;
@@ -158,6 +160,7 @@ class _LokasiPPLCard extends StatelessWidget {
 
   const _LokasiPPLCard({
     Key? key,
+    required this.id,
     required this.lokasi,
     required this.alamat,
     required this.Kehadiran,
@@ -248,7 +251,11 @@ class _LokasiPPLCard extends StatelessWidget {
                       // Tombol Lihat
                       ElevatedButton(
                         onPressed: () {
-                          Get.to(HadirPage());
+                          Get.to(HadirPage(), arguments: {
+                            "lokasi_id": id,
+                            "lokasi": lokasi,
+                            "alamat": alamat
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                           padding:

@@ -88,13 +88,17 @@ class _LoginPageState extends State<LoginPage> {
 
         final resDecodeMe = jsonDecode(resMe.body);
 
-        final typeAkun = resDecodeMe["data"]["roles"] as String;
+        final data = resDecodeMe["data"];
+
+        final typeAkun = data["roles"] as String;
+        final id = data["id"] as int;
 
         Log.debug("resDecodeMe : $resDecodeMe");
         Log.debug("typeAkun : $typeAkun");
 
         SharedPreferenceUtils.setString(KEY_TOKEN, token);
         SharedPreferenceUtils.setString(KEY_TYPE_AKUN, typeAkun);
+        SharedPreferenceUtils.setInt(KEY_ID, id);
 
         if (typeAkun == TypeUser.dosenPembimbing.description) {
           Log.debug("test");

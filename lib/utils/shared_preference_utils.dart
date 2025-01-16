@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter_application_1/utils/log.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +24,18 @@ class SharedPreferenceUtils {
   static Future<String?> getString(String key) async {
     await _waitForInitialization();
     return _prefs?.getString(key);
+  }
+
+  static Future<void> setInt(String key, int value) async {
+    await _waitForInitialization();
+    await _prefs?.setInt(key, value);
+    Log.debug("Saved to SharedPreferences: $key = $value");
+  }
+
+  /// Get String
+  static Future<int?> getInt(String key) async {
+    await _waitForInitialization();
+    return _prefs?.getInt(key);
   }
 
   /// Set Boolean
