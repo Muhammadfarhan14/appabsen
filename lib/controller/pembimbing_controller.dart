@@ -45,7 +45,7 @@ class PembimbingController extends GetxController {
       dataLokasiPpl.value = response['data'];
     } catch (e) {
       Log.debug(e.toString());
-      Get.snackbar("Error", e.toString());
+      // Get.snackbar("Error", e.toString());
     }
   }
 

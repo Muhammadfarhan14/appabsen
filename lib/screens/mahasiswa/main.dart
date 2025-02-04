@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/login.dart';
-import 'package:flutter_application_1/screens/dosen-pembimbing/home.dart';
 import 'package:flutter_application_1/screens/mahasiswa/history.dart';
 import 'package:flutter_application_1/screens/mahasiswa/home.dart';
 import 'package:flutter_application_1/screens/mahasiswa/lokasi.dart';
@@ -22,7 +21,7 @@ class _MainMahasiswaState extends State<MainMahasiswa> {
   final List<Widget> _pages = [
     HomePage(),
     LokasiPage(),
-    HistoryPage(),
+    RiwayatPresensiPage(),
   ];
 
   @override
@@ -53,7 +52,8 @@ class _MainMahasiswaState extends State<MainMahasiswa> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.camera_alt_outlined), label: 'Absen'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.camera_alt_outlined), label: 'Absen'),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
         ],
         selectedItemColor: Colors.green,

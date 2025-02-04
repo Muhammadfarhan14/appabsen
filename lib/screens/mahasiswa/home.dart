@@ -30,8 +30,28 @@ class HomePage extends StatelessWidget {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Obx(
-          () => Column(
+        child: Obx(() {
+          final absenBulanIni = absenController.dataAbsenBulanIni;
+          int sumHadir = 0;
+          int sumSakit = 0;
+          int sumIzin = 0;
+
+          Log.debug("absenBulanIni => $absenBulanIni");
+
+          for (var item in absenBulanIni) {
+            final status = item["status"] as String;
+            final jumlah = item["jumlah"] as int;
+
+            if (Absen.hadir.description == status) {
+              sumHadir = jumlah;
+            } else if (Absen.sakit.description == status) {
+              sumSakit = jumlah;
+            } else if (Absen.izin.description == status) {
+              sumIzin = jumlah;
+            }
+          }
+
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -61,11 +81,11 @@ class HomePage extends StatelessWidget {
                 childAspectRatio: 2,
                 children: [
                   _buildAbsenceDetailCard(
-                      'Hadir', '1 Hari', Colors.green, Icons.done),
+                      'Hadir', "$sumHadir hari", Colors.green, Icons.done),
                   _buildAbsenceDetailCard(
-                      'Izin', '0 Hari', Colors.orange, Icons.alarm),
-                  _buildAbsenceDetailCard(
-                      'Sakit', '0 Hari', Colors.grey, Icons.medical_services),
+                      'Izin', "$sumIzin hari", Colors.orange, Icons.alarm),
+                  _buildAbsenceDetailCard('Sakit', "$sumSakit hari",
+                      Colors.grey, Icons.medical_services),
                   // _buildAbsenceDetailCard(
                   //     'Terlambat', '1 Hari', Colors.red, Icons.timer_off),
                 ],
@@ -148,8 +168,8 @@ class HomePage extends StatelessWidget {
                     ),
                   )),
             ],
-          ),
-        ),
+          );
+        }),
       ),
     );
   }

@@ -49,6 +49,8 @@ class _LoginPageState extends State<LoginPage> {
     final String email = _emailController.text.trim();
     final String password = _passwordController.text;
 
+    Log.debug(loginUrl);
+
     if (email.isEmpty && password.isEmpty) {
       Get.snackbar(
         'Error',
@@ -68,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
         Uri.parse(loginUrl),
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: json.encode({
           'username': email,
@@ -83,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token', // Tambahkan Bearer Token di sini
+            'Accept': 'application/json',
           },
         );
 
@@ -91,17 +95,17 @@ class _LoginPageState extends State<LoginPage> {
         final data = resDecodeMe["data"];
 
         final typeAkun = data["roles"] as String;
-        final id = data["id"] as int;
 
         Log.debug("resDecodeMe : $resDecodeMe");
         Log.debug("typeAkun : $typeAkun");
 
         SharedPreferenceUtils.setString(KEY_TOKEN, token);
         SharedPreferenceUtils.setString(KEY_TYPE_AKUN, typeAkun);
-        SharedPreferenceUtils.setInt(KEY_ID, id);
 
         if (typeAkun == TypeUser.dosenPembimbing.description) {
-          Log.debug("test");
+          final id = data["id"] as int;
+          SharedPreferenceUtils.setInt(KEY_ID, id);
+
           Get.off(() => MainDosenPembimbing());
         }
         // else if (typeAkun == TypeUser.pembimbingLapangan) {
@@ -113,9 +117,11 @@ class _LoginPageState extends State<LoginPage> {
           Log.debug("error");
         }
       } else {
+        final res = jsonDecode(response.body);
+        Log.error(response.body);
         Get.snackbar(
           'Error',
-          'Server tidak dapat dihubungi (status: ${response.statusCode})',
+          '${res["message"]} (status: ${response.statusCode})',
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );

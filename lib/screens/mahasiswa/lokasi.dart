@@ -164,7 +164,8 @@ class _LokasiPageState extends State<LokasiPage> {
                   width: 130,
                   child: ElevatedButton.icon(
                     onPressed: () async {
-                      absenController.checkAbsenDatang();
+                      absenController.absenDatang();
+                      // absenController.checkAbsenDatang();
                       // if (isPositionPpl) {
                       //   absenController.checkAbsenDatang();
                       // } else {

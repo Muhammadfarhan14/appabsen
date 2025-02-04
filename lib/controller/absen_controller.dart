@@ -22,6 +22,8 @@ class AbsenController extends GetxController {
   var file = Rxn<File>(); // Rxn untuk nullable
   final keteranganController = TextEditingController();
   var dataAbsen = [].obs;
+  var dataAbsenBulanIni = [].obs;
+  var dataHistory = [].obs;
 
   @override
   void onInit() {
@@ -36,6 +38,8 @@ class AbsenController extends GetxController {
     }
     // Setelah token tersedia, panggil getAbsen
     await getAbsen();
+    await getAbsenBulanIni();
+    await getHistory("2025", "1");
   }
 
   Future<void> pickFile() async {
@@ -44,6 +48,19 @@ class AbsenController extends GetxController {
     if (result != null && result.files.single.path != null) {
       file.value =
           File(result.files.single.path!); // Menyimpan file yang dipilih
+    }
+  }
+
+  Future<void> getAbsenBulanIni() async {
+    try {
+      Log.debug("getAbsen");
+      Log.debug("token $token");
+      final response =
+          await apiService.getRequest(URL_GET_ABSEN_BULAN_INI, token);
+      dataAbsenBulanIni.value = response['data'];
+    } catch (e) {
+      Log.debug(e.toString());
+      // Get.snackbar("Error", e.toString());
     }
   }
 
@@ -56,7 +73,7 @@ class AbsenController extends GetxController {
       dataAbsen.value = response['data'];
     } catch (e) {
       Log.debug(e.toString());
-      Get.snackbar("Error", e.toString());
+      // Get.snackbar("Error", e.toString());
     }
   }
 
@@ -75,10 +92,11 @@ class AbsenController extends GetxController {
   // Fungsi untuk absen datang (POST request)
   Future<void> absenDatang() async {
     try {
-      final input = {"status": Absen.hadir};
+      final input = {"status": Absen.hadir.description};
 
       final resDecodeMe =
           await apiService.postRequest(URL_ABSEN_DATANG, token, input);
+      await getAbsenBulanIni();
       Get.snackbar("Berhasil", resDecodeMe['message']);
       Get.to(const MainMahasiswa());
     } catch (e) {
@@ -88,22 +106,33 @@ class AbsenController extends GetxController {
   }
 
   Future<void> izin() async {
-    // Log.debug("status : $status");
-    // Log.debug("keterangan : ${keteranganController.value.text}");
-    // Log.debug("tanggal : ${tanggal}");
-    // Log.debug("file : ${file.value?.path}");
-    final keterangan = keteranganController.value.text;
+    final keterangan = keteranganController.value.text.toString();
+    final statusLower = status.value.toLowerCase() == "lain-lain"
+        ? "izin"
+        : status.value.toLowerCase();
 
     try {
-      final input = {"status": status, "keterangan": keterangan};
+      final input = {"status": statusLower, "keterangan": keterangan};
 
       final resDecodeMe = await apiService.postRequest(
           URL_ABSEN_DATANG, token, input, file.value);
       Get.snackbar("Berhasil", resDecodeMe['message']);
-      Get.to(const MainMahasiswa());
+      Get.offAll(const MainMahasiswa());
+    } catch (e) {
+      Log.debug(e);
+      Get.snackbar("Error", e.toString());
+    }
+  }
+
+  Future<void> getHistory(String year, String month) async {
+    try {
+      final response = await apiService.getRequest(
+          "$URL_GET_ABSEN_TANGGAL/$month/$year", token);
+      Log.debug(response);
+      dataHistory.value = response['data'];
     } catch (e) {
       Log.debug(e.toString());
-      Get.snackbar("Error", e.toString());
+      // Get.snackbar("Error", e.toString());
     }
   }
 }

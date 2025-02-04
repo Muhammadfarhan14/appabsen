@@ -10,6 +10,7 @@ class DosenPage extends StatelessWidget {
       Get.put(PembimbingController());
 
   Widget build(BuildContext context) {
+    final lokasiPpl = pembimbingController.dataLokasiPpl;
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: null,
@@ -19,7 +20,11 @@ class DosenPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header Section
-              _HeaderSection(),
+              lokasiPpl.isNotEmpty
+                  ? _HeaderSection(
+                      namaPembimbing: lokasiPpl[0]["dosen_pembimbing"],
+                    )
+                  : Container(),
 
               SizedBox(height: 10),
 
@@ -41,10 +46,11 @@ class DosenPage extends StatelessWidget {
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: pembimbingController.dataLokasiPpl
+                  itemCount: lokasiPpl
                       .length, // Pastikan jumlah ini sesuai dengan data Anda
                   itemBuilder: (context, index) {
-                    final dataPpl = pembimbingController.dataLokasiPpl[index];
+                    final dataPpl = lokasiPpl[index];
+                    Log.debug("home");
                     Log.debug(dataPpl);
                     return _LokasiPPLCard(
                       id: dataPpl["id"],
@@ -68,7 +74,9 @@ class DosenPage extends StatelessWidget {
 
 // Header Section Widget
 class _HeaderSection extends StatelessWidget {
-  const _HeaderSection({Key? key}) : super(key: key);
+  final String namaPembimbing;
+
+  const _HeaderSection({Key? key, this.namaPembimbing = ""}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +100,7 @@ class _HeaderSection extends StatelessWidget {
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               Text(
-                "Reza Maulana",
+                namaPembimbing,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -169,7 +177,6 @@ class _LokasiPPLCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Log.debug("images => $logoPath");
     return Card(
       margin: EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

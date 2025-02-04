@@ -26,7 +26,7 @@ class DatePickerController extends GetxController {
   }
 
   void setDate(int index) {
-    print('Date selected: $index'); // Debugging log
+    Log.debug('Date selected: $index'); // Debugging log
     selectedDateIndex.value = index;
   }
 
@@ -98,6 +98,7 @@ class _DatePickerState extends State<DatePicker> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Obx(() {
+          Log.debug("selectedDateIndex => ${dateController.selectedDateIndex}");
           return Container(
             height: 45.h,
             width: 270.w,
